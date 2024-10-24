@@ -1,8 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:interview_task/day_widget.dart';
+import 'package:http/http.dart' as http;
+import 'package:interview_task/response_model.dart';
 
 class TimePicker extends StatelessWidget {
   const TimePicker({super.key});
+
+  Future<ResponseModel> apiCall() async {
+    var url = Uri.parse('https://jsonplaceholder.typicode.com/posts/1');
+    var response = await http.get(url);
+    return ResponseModel.fromMap(
+        jsonDecode(response.body) as Map<String, dynamic>);
+    print(response.body);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +105,8 @@ class TimePicker extends StatelessWidget {
                       const SizedBox(height: 20),
                       const Text(
                         "Rushabh Dev",
-                        style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 30),
                     ],
@@ -111,6 +123,29 @@ class TimePicker extends StatelessWidget {
                     child: DayWidget(day: daysOfWeek[index]),
                   );
                 },
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final response = await apiCall();
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(response.title),
+                        content: Text(response.body),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('Okay!'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Text('Submit'),
               ),
             ],
           ),
