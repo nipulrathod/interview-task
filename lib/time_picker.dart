@@ -13,7 +13,6 @@ class TimePicker extends StatelessWidget {
     var response = await http.get(url);
     return ResponseModel.fromMap(
         jsonDecode(response.body) as Map<String, dynamic>);
-    print(response.body);
   }
 
   @override
@@ -124,28 +123,40 @@ class TimePicker extends StatelessWidget {
                   );
                 },
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  final response = await apiCall();
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(response.title),
-                        content: Text(response.body),
-                        actions: <Widget>[
-                          TextButton(
-                            child: const Text('Okay!'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      backgroundColor: Colors.amber,
+                    ),
+                    onPressed: () async {
+                      final response = await apiCall();
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text(response.title),
+                            content: Text(response.body),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Okay!'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
-                  );
-                },
-                child: Text('Submit'),
+                    child: Text('Submit',style: TextStyle(fontSize: 16,color: Colors.black),),
+                  ),
+                ),
               ),
             ],
           ),
